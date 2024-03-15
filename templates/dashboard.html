@@ -1,0 +1,133 @@
+{% include "header.html" %}
+<script>
+  function sendOption(option) {
+    var formId = "form" + option;
+    var form = document.getElementById(formId);
+    var formData = new FormData(form);
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/submit", true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+        console.log(xhr.responseText);
+      }
+    };
+    xhr.send(formData);
+  }
+</script>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/@recogito/annotorious@2.7.10/dist/annotorious.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/@recogito/annotorious@2.7.10/dist/annotorious.min.js"></script>
+<link rel="stylesheet" type="text/css" href="static/main.css" />
+<body>
+  <div class="container mt-4">
+    {% for n,image in enumerate(images) %}
+    <div style="display: inline-block; padding: 7px 15px 7px 15px">
+      <form
+        id="form{{n}}"
+        method="POST"
+        enctype="multipart/form-data"
+        class="form-control"
+      >
+        <img
+          src="data:image/jpeg;base64,{{ image.data|b64encode }}"
+          class="rounded"
+          id="selected-image-{{n}}"
+        />
+        <script type="text/javascript">
+          (function () {
+            var anno = Annotorious.init({
+              image: "selected-image-{{n}}",
+            });
+            // Add event handlers using .on
+            // Sample annotation data
+            anno.loadAnnotations('{{ url_for("get_anno", img_id=image.id) }}');
+
+            anno.on("createAnnotation", function (annotation) {
+              // Send annotation data to Flask server
+              saveAnnotation(annotation);
+            });
+
+            function saveAnnotation(annotation) {
+              // Create an XMLHttpRequest object
+              var xhr = new XMLHttpRequest();
+
+              // Prepare the request URL
+              var url = "/save_annotation";
+              // Set up the request
+              xhr.open("POST", url, true);
+              xhr.setRequestHeader("Content-Type", "application/json");
+              // Get selected image snippet and transform
+              const snippet = anno.getSelectedImageSnippet();
+              // Define the variable n
+              var n = "{{ image.id }}";
+
+              // Create an object with data and n properties
+              var requestData = {
+                data: annotation,
+                n: n,
+                zz: snippet,
+              };
+              // Define the data to be sent
+              var data = JSON.stringify(requestData);
+              // Send the request
+              xhr.send(data);
+            }
+          })();
+        </script>
+        <p style="margin: 0px">{{image.results}}</p>
+        {% for item in image.category.split(',') %}
+        <div class="form-check" style="display: inline-block">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="option"
+            value="{{ item }},{{image.id}}"
+            onclick="sendOption({{n}})"
+          />
+          <label class="form-check-label"> {{ item }} </label>
+        </div>
+        {% endfor %}
+      </form>
+    </div>
+    {% endfor %}
+  </div>
+  {% if pagination.pages|length > 1 %}
+  <div class="pagination justify-content-center">
+    <ul class="pagination">
+      {% if pagination.has_prev %} {% set prev_page_num = pagination.page - 1 %}
+      <li class="page-item">
+        <a class="page-link" href="{{ url_for('index', page=prev_page_num) }}"
+          ><b> ← </b></a
+        >
+      </li>
+      {% else %}
+      <li class="page-item disabled"><span class="page-link">←</span></li>
+      {% endif %} {% for page_num in pagination.pages %} {% if page_num %} {% if
+      page_num == pagination.page %}
+      <li class="page-item active">
+        <span class="page-link">{{ page_num }}</span>
+      </li>
+      {% else %}
+      <li class="page-item">
+        <a class="page-link" href="{{ url_for('index', page=page_num) }}"
+          >{{ page_num }}</a
+        >
+      </li>
+      {% endif %} {% else %}
+      <li class="page-item disabled"><span class="page-link">...</span></li>
+      {% endif %} {% endfor %} {% if pagination.has_next %} {% set next_page_num
+      = pagination.page + 1 %}
+      <li class="page-item">
+        <a class="page-link" href="{{ url_for('index', page=next_page_num) }}"
+          ><b>→</b></a
+        >
+      </li>
+      {% else %}
+      <li class="page-item disabled"><span class="page-link">→</span></li>
+      {% endif %}
+    </ul>
+  </div>
+  {% endif %} {% include "footer.html" %}
+</body>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>AIMLEAP</title>
+
+    <!-- Bootstrap -->
+    <link href="static/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="static/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="static/vendors/nprogress/nprogress.css" rel="stylesheet">
+    <!-- Animate.css -->
+    <link href="static/vendors/animate.css/animate.min.css" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="static/build/css/custom.min.css" rel="stylesheet">
+</head>
+
+<body class="login">
+<div>
+    <a class="hiddenanchor" id="signup"></a>
+    <a class="hiddenanchor" id="signin"></a>
+    <div class="login_wrapper">
+        <div class="animate form login_form">
+            <section class="login_content">
+                <form action="" method="POST" value="">
+                    {{ form.csrf_token }}
+                    <h1>Login Form</h1>
+                    <div>
+                        {{ form.email.label }} {{ form.email(class_="form-control") }}
+                    </div>
+                    <div>
+                        {{ form.password.label }} {{ form.password(class_="form-control") }}
+                    </div>
+                    <div style="margin-left: 88px;">
+                        {{form.submit(class_="btn btn-default submit",style="text-align: center")}}
+                    </div>
+                    <div>
+                        {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                        {% for message in messages %}
+                        <p>{{ message }}</p>
+                        {% endfor %}
+                        {% endif %}
+                        {% endwith %}
+                    </div>
+
+
+                    <div class="clearfix"></div>
+
+                    <div class="separator">
+                        <p class="change_link">New to site?
+                            <a href="#signup" class="to_register"> Create Account </a>
+                        </p>
+                        <div class="separator">
+
+
+
+                        <div class="clearfix"></div>
+                        <br/>
+
+                        <div>
+                            <h1><i class="fa fa-paw"></i>AIMLEAP</h1>
+
+                        </div>
+                    </div>
+                </form>
+            </section>
+        </div>
+
+        <div id="register" class="animate form registration_form">
+            <section class="login_content">
+                <form action="" method="POST" value="">
+                    {{ form1.csrf_token }}
+                    <h1>Create Account</h1>
+                    <div>
+
+                        {{ form1.name.label }} {{ form1.name(class_="form-control") }}
+                    </div>
+                    <div>
+                        {{ form1.email.label }} {{ form1.email(class_="form-control",id="email1") }}
+                    </div>
+                    <div>
+                        {{ form1.password.label }} {{ form1.password(class_="form-control",id="password1") }}
+                    </div>
+                    <div style="margin-left: 88px;">
+                        {{form1.submit(class_="btn btn-default submit",style="text-align: center",id="submit1")}}
+                    </div>
+                    {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                    {% for message in messages %}
+                    <p>{{ message }}</p>
+                    {% endfor %}
+                    {% endif %}
+                    {% endwith %}
+                    <div class="clearfix"></div>
+
+                    <div class="separator">
+                        <p class="change_link">Already a member ?
+                            <a href="#signin" class="to_register"> Log in </a>
+                        </p>
+
+                        <div class="clearfix"></div>
+                        <br/>
+
+                        <div>
+                            <h1><i class="fa fa-paw"></i> AIMLEAP</h1>
+                        </div>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </div>
+</div>
+</body>
+</html>

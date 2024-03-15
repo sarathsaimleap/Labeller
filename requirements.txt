@@ -1,0 +1,8 @@
+Flask
+Flask_Bootstrap
+Flask_Gravatar
+Flask_Login
+flask_sqlalchemy
+Flask_WTF
+Werkzeug
+WTForms

@@ -1,0 +1,13 @@
+
+.images {
+    width: 300px;
+    height: 150px;
+  }
+.radio-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.radio-buttons label {
+  margin-right: 10px;
+}
